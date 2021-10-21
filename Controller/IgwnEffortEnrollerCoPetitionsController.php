@@ -8,28 +8,33 @@ class IgwnEffortEnrollerCoPetitionsController extends CoPetitionsController {
   public $uses = array("CoPetition");
 
   protected function execute_plugin_finalize($id, $onFinish) {
-    // IGWN effort logic goes here.
-
-    $this->log("IgwnEffort enroller finalize is called with petition $id and " . print_r($onFinish, true));
-
+    // Use the petitition ID to find the petition and include
+    // the COU and CO Person Role objects.
     $args = array();
     $args['conditions']['CoPetition.id'] = $id;
-    $args['contain'] = false;
+    $args['contain'] = array('Cou', 'EnrolleeCoPersonRole');
 
     $coPetition = $this->CoPetition->find('first', $args);
 
-    $this->log("Found petition " . print_r($coPetition, true));
+    // Use the details from the petition, COU, and CO Person Role
+    // to construct the URL into the IGWN Effort Manager view.
+    $pluginRedirect = array();
+    $pluginRedirect['plugin'] = 'igwn_effort_manager';
+    $pluginRedirect['controller'] = 'co_igwn_role_effort';
+    $pluginRedirect['action'] = 'add';
+    $pluginRedirect['co'] = $coPetition['CoPetition']['co_id'];
+    $pluginRedirect['role_id'] = $coPetition['CoPetition']['enrollee_co_person_role_id'];
+    $pluginRedirect['cou_name'] = $coPetition['Cou']['name'];
+    $pluginRedirect['cou_id'] = $coPetition['Cou']['id'];
+    $pluginRedirect['co_person_id'] = $coPetition['CoPetition']['enrollee_co_person_id'];
+    $pluginRedirect['affiliation'] = $coPetition['EnrolleeCoPersonRole']['affiliation'];
 
-
+    // Record the enrollment flow URL re-entry point in a session variable
+    // so that the IGWN Effort Manager plugin can redirect back into
+    // the enrollment flow at the correct point.
     $this->Session->write('Igwn.plugin.effort.enroller.onFinish', $onFinish);
 
-    $foo = $this->Session->read('Igwn.plugin.effort.enroller.onFinish');
-
-    $this->log("Foo is " . print_r($foo, true));
-
-
-    // Redirect now that we are done.
-    $this->redirect($onFinish);
+    // Redirect into the IGWN Effort Manager plugin.
+    $this->redirect($pluginRedirect);
   }
-
 }
