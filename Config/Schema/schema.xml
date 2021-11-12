@@ -1,0 +1,28 @@
+<?xml version="1.0" ?>
+
+<schema version="0.3">
+    <table name="igwn_effort_enrollers">
+        <field name="id" type="I">
+            <key />
+            <autoincrement />
+        </field>
+        <field name="co_enrollment_flow_wedge_id" type="I">
+            <constraint>REFERENCES cm_co_enrollment_flow_wedges(id)</constraint>
+        </field>
+        <field name="created" type="T" />
+        <field name="modified" type="T" />
+        <field name="revision" type="I" />
+        <field name="deleted" type="L" />
+        <field name="actor_identifier" type="C" size="256" />
+        <field name="igwn_effort_enroller_id" type="I">
+            <constraint>REFERENCES cm_igwn_effort_enrollers(id)</constraint>
+        </field>
+
+        <index name="igwn_effort_enrollers_i1">
+            <col>co_enrollment_flow_wedge_id</col>
+        </index>
+        <index name="igwn_effort_enrollers_i2">
+            <col>igwn_effort_enroller_id</col>
+        </index>
+    </table>
+</schema>
