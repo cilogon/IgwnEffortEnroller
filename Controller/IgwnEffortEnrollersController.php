@@ -17,19 +17,19 @@ class IgwnEffortEnrollersController extends SEWController {
 
     // Construct the permission set for this user, which will also be passed to the view.
     $p = array();
-    
+
     // Delete an existing configuration?
     $p['delete'] = ($roles['cmadmin'] || $roles['coadmin']);
-    
+
     // Edit an existing configuration?
     $p['edit'] = ($roles['cmadmin'] || $roles['coadmin']);
-    
+
     // View the existing configuration?
     $p['index'] = ($roles['cmadmin'] || $roles['coadmin']);
-    
+
     // View the existing confinguration?
     $p['view'] = ($roles['cmadmin'] || $roles['coadmin']);
-    
+
     $this->set('permissions', $p);
     return $p[$this->action];
   }
