@@ -16,6 +16,14 @@ class IgwnEffortEnrollerCoPetitionsController extends CoPetitionsController {
 
     $coPetition = $this->CoPetition->find('first', $args);
 
+    $curStatus = $coPetition['CoPetition']['status'];
+
+    // First check to see if the petition was denied (or declined). If so, then do not prompt to enter effort hours!
+    if($curStatus == PetitionStatusEnum::Declined || $curStatus == PetitionStatusEnum::Denied)
+    {
+      $this->redirect($onFinish);
+    }
+
     // Use the details from the petition, COU, and CO Person Role
     // to construct the URL into the IGWN Effort Manager view.
     $pluginRedirect = array();
