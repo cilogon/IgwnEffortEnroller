@@ -1,4 +1,4 @@
-<?
+<?php
 
 App::uses('CoPetitionsController', 'Controller');
 
