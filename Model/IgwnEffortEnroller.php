@@ -1,4 +1,4 @@
-<?
+<?php
 
 class IgwnEffortEnroller extends AppModel {
   // Required by COmanage Plugins
